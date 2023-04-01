@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from posts.models import Post
+from django.core import serializers
 
 # Create your views here.
 def home(request):
@@ -35,7 +37,12 @@ def components(request, title):
         return render(request, 'admin/components/components-tooltips.html')
 
 def data_tables(request):
-    return render(request, 'admin/tables/tables-data.html')
+    posts = Post.objects.values()
+    fields = Post._meta.get_fields()
+    return render(request, 'admin/tables/tables-data.html', {
+        'posts': posts, 
+        'fields': fields
+        })
 
 def forms(request, title):
     if title == 'elements':
