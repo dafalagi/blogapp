@@ -6,7 +6,13 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Data Tables</h1>
+
+      {% if request.path == '/admin/data-tables/' %}
+        <h1>Post Tables</h1>
+      {% else %}
+        <h1>Data Tables</h1>
+      {% endif %}
+
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
@@ -22,10 +28,16 @@
 
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Datatables</h5>
+              
+              {% if request.path == '/admin/data-tables/' %}
+                <h5 class="card-title">Post Table</h5>
+              {% else %}
+                <h5 class="card-title">Data Table</h5>
+              {% endif %}
+                
               <p>Add lightweight datatables to your project with using the <a href="https://github.com/fiduswriter/Simple-DataTables" target="_blank">Simple DataTables</a> library. Just add <code>.datatable</code> class name to any table you wish to conver to a datatable</p>
               <div class="d-flex justify-content-end mb-2">
-                <a href="/admin/post/add" class="btn btn-primary">
+                <a href="/admin/create" class="btn btn-primary">
                   <i class="bi bi-plus-lg"></i>
                   Add New
                 </a>
@@ -40,7 +52,7 @@
 
                     {% for field in fields %}  
                       {% if field.name != 'id' %}
-                        <th scope="col">{{ field.name|capfirst }}</th>
+                        <th scope="col">{{ field.name|title }}</th>
                       {% endif %}
                     {% endfor %}
                   </tr>
@@ -49,18 +61,18 @@
                   {% for post in posts %}  
                     <tr>
                       <td>
-                        <a href="/admin/post/edit/{{ post.id }}" class="btn btn-sm btn-info">
+                        <a href="/admin/post/{{ post.id }}" class="btn btn-sm btn-info">
                           <i class="bi bi-info-circle"></i>
                         </a>
-                        <a href="/admin/post/edit/{{ post.id }}" class="btn btn-sm btn-warning">
+                        <a href="/admin/update/{{ post.id }}" class="btn btn-sm btn-warning">
                           <i class="bi bi-pencil-square"></i>
                         </a>
-                        <a href="/admin/post/delete/{{ post.id }}" class="btn btn-sm btn-danger">
+                        <a href="/admin/delete/{{ post.id }}" class="btn btn-sm btn-danger">
                           <i class="bi bi-exclamation-octagon"></i>
                         </a>
                       </td>
                       <th scope="row">{{ post.id }}</th>
-
+                      
                       {% for key, value in post.items %}  
                         {% if key != 'id' %}
                           <td>{{ value }}</td>

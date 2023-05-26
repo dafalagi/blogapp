@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from posts.models import Post
-from django.core import serializers
+from .forms import PostForm
+from django.contrib import messages
 
 # Create your views here.
 def home(request):
@@ -82,3 +83,58 @@ def error(request):
 
 def blank(request):
     return render(request, 'admin/pages/pages-blank.html')
+
+def create(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            body = form.cleaned_data['body']
+
+            post = Post(title=title, body=body)
+            post.save()
+            
+            return redirect('data-tables')
+        else:
+            messages.info(request, 'Invalid Value')
+            return redirect('create')
+    else:
+        return render(request, 'admin/pages/pages-create.html')
+
+def update(request, id):
+    post = Post.objects.get(id=id)
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            body = form.cleaned_data['body']
+
+            post.title = title
+            post.body = body
+            post.save()
+            
+            return redirect('data-tables')
+        else:
+            messages.info(request, 'Invalid Value')
+            return redirect('update', id)
+    else:
+        return render(request, 'admin/pages/pages-update.html', {
+            'post': post
+        })
+
+def delete(request, id):
+    post = Post.objects.get(id=id)
+    post.delete()
+    return redirect('data-tables')
+
+def logout(request):
+    return redirect('login')
+
+def show(request, id):
+    post = Post.objects.get(id=id)
+    return render(request, 'admin/pages/pages-show.html', {
+        'post': post
+    })
+

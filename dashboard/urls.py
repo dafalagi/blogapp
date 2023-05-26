@@ -37,4 +37,16 @@ urlpatterns = [
     # This is the path to the blank page
     path('blank/', views.blank, name='blank'),
 
+    # This is the path to create new data
+    path('create/', views.create, name='create'),
+
+    # This is the path to update data
+    path('update/<str:id>', views.update, name='update'),
+
+    # This is the path to delete data
+    path('delete/<str:id>', views.delete, name='delete'),
+
+    # This is the path to show post data
+    path('post/<str:id>', views.show, name='show'),
+
 ]
